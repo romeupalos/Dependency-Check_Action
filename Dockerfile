@@ -8,8 +8,14 @@ LABEL repository="https://github.com/dependency-check/Dependency-Check_Action" \
       com.github.actions.icon="shield" \
       com.github.actions.color="red"
 
-USER root 
+ARG UNAME=runner
+ARG UID=1040
+ARG GID=1040
+RUN addgroup --gid $GID $UNAME
+RUN adduser --disabled-password --gecos "" --no-create-home --uid $UID --ingroup $UNAME --shell /bin/bash $UNAME
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/bin/sh","/entrypoint.sh"]
+
+USER $UNAME
